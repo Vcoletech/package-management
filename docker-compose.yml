@@ -1,0 +1,200 @@
+version: '3.1'
+networks:
+  boa:
+    driver: bridge
+services:
+  java-app: 
+    image: mylandmarktech/java-web-app
+    networks: 
+    - boa 
+    restart: always
+    ports:
+    - 7000:8080 
+  web-app: 
+    image: mylandmarktech/hello
+    networks: 
+    - boa 
+    restart: always
+    ports:
+    - 6000:8080 
+  my-app:
+    image: mylandmarktech/maven-web-app
+    networks: 
+    - boa 
+    restart: always
+    ports:
+    - 3000:8080 
+  mysql:
+    image: mysql
+    networks: 
+    - boa 
+    
+    --------------------------------------------------------------
+    Example 1: (Volumes & Networks also will be created by docker compose)
+
+# docker-compose.yml 
+
+version: '3.1'
+
+services:
+  app:
+    image: mylandmarktech/myapp:6
+    restart: always # This will be ignored if we deploy in docker swarm
+    environment:
+    - MONGO_DB_HOSTNAME=mongod
+    - MONGO_DB_USERNAME=devdb
+    - MONGO_DB_PASSWORD=devdb123
+    ports:
+      - 8080:8080
+    networks:
+    - wellsfargo
+  mongod:
+    image: mongo
+    environment:
+    - MONGO_INITDB_ROOT_USERNAME=devdb
+    - MONGO_INITDB_ROOT_PASSWORD=devdb123
+    volumes:
+      - mydatas:/data/db
+    restart: always
+    networks:
+    - wellsfargo
+
+volumes:
+  mydatas:
+    driver: local
+networks:
+  wellsfargo:
+    driver: bridge
+
+
+Commands
+=# Syntax Check
+docker-compose config 
+=# Create Services/Contianers
+docker-compose up -d  
+  
+=# Remove Services/Contianers 
+docker-compose down	  
+
+Example 2: (Volumes & Networks will not be created by docker compose.As we set volumes and networks as external)
+==========
+version: '3.1'
+
+services:
+  app:
+    #replicas: 4
+    image: mylandmarktech/myapp:6
+    restart: always # This will be ignored if we deploy in docker swarm
+    environment:
+    - MONGO_DB_HOSTNAME=mongod
+    - MONGO_DB_USERNAME=devdb
+    - MONGO_DB_PASSWORD=devdb123
+    ports:
+      - 8080:8080
+    networks:
+    - wellsfargo
+  mongod:
+    image: mongo
+    environment:
+    - MONGO_INITDB_ROOT_USERNAME=devdb
+    - MONGO_INITDB_ROOT_PASSWORD=devdb123
+    volumes:
+      - mydatas:/data/db
+    restart: always
+    networks:
+    - wellsfargo
+
+volumes:
+  mydatas:
+    external: true
+networks:
+  wellsfargo:
+    external: true
+    
+    -------------------------------------------------
+    ------------------------------------------------
+    Defautl name :
+   docker-compose.yml or 
+   docker-compose.yaml
+
+
+Example 1: (Volumes & Networks also will be created by docker compose)
+
+# docker-compose.yml 
+
+version: '3.1'
+
+services:
+  app:
+    image: mylandmarktech/myapp:6
+    restart: always # This will be ignored if we deploy in docker swarm
+    environment:
+    - MONGO_DB_HOSTNAME=mongod
+    - MONGO_DB_USERNAME=devdb
+    - MONGO_DB_PASSWORD=devdb123
+    ports:
+      - 8080:8080
+    networks:
+    - wellsfargo
+  mongod:
+    image: mongo
+    environment:
+    - MONGO_INITDB_ROOT_USERNAME=devdb
+    - MONGO_INITDB_ROOT_PASSWORD=devdb123
+    volumes:
+      - mydatas:/data/db
+    restart: always
+    networks:
+    - wellsfargo
+
+volumes:
+  mydatas:
+    driver: local
+networks:
+  wellsfargo:
+    driver: bridge
+
+
+Commands
+=# Syntax Check
+docker-compose config 
+=# Create Services/Contianers
+docker-compose up -d  
+  
+=# Remove Services/Contianers 
+docker-compose down	  
+
+Example 2: (Volumes & Networks will not be created by docker compose.As we set volumes and networks as external)
+==========
+version: '3.1'
+
+services:
+  app:
+    #replicas: 4
+    image: mylandmarktech/myapp:6
+    restart: always # This will be ignored if we deploy in docker swarm
+    environment:
+    - MONGO_DB_HOSTNAME=mongod
+    - MONGO_DB_USERNAME=devdb
+    - MONGO_DB_PASSWORD=devdb123
+    ports:
+      - 8080:8080
+    networks:
+    - wellsfargo
+  mongod:
+    image: mongo
+    environment:
+    - MONGO_INITDB_ROOT_USERNAME=devdb
+    - MONGO_INITDB_ROOT_PASSWORD=devdb123
+    volumes:
+      - mydatas:/data/db
+    restart: always
+    networks:
+    - wellsfargo
+
+volumes:
+  mydatas:
+    external: true
+networks:
+  wellsfargo:
+    external: true
